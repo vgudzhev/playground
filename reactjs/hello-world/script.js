@@ -1,10 +1,18 @@
-//*Reusable components
 var BootstrapButton = React.createClass({
+  loadScriptFromServer: function(){
+    $.getScript( this.props.source, function( data, textStatus, jqxhr ) {
+            console.log( data ); // Data returned
+            console.log( textStatus ); // Success
+            console.log( jqxhr.status ); // 200
+            console.log( "Load was performed." );
+          });
+  },
   render: function() {
     return (
       <a {...this.props}
         href="javascript:;"
         role="button"
+        onClick={this.loadScriptFromServer()}
         className={(this.props.className || '') + ' btn'} />
     );
   }
@@ -45,16 +53,14 @@ var ComponentList = React.createClass({
   render: function() {
       var componentNodes = this.props.data.map(function(component) {
         return (
-          <li>
-            <Component componentName={component.componentName} included={component.included} key={component.id} />
+          <li key={component.id} className="menu-list">
+            <Component componentName={component.componentName} included={component.included} key={component.id} source={component.source} />
           </li>
         );
       });
       return (
         <ul className="nav nav-sidebar">
-
               {componentNodes}
-
         </ul>
       )
   }
@@ -64,8 +70,8 @@ var Component = React.createClass({
     var isIncluded = this.props.included == 'yes';
     var classForButton = isIncluded ?"btn-success":"btn-danger";
     return (
-        <BootstrapButton className={classForButton}>
-          {this.props.componentName} /included:{this.props.included}
+        <BootstrapButton className={classForButton} source={this.props.source} onClick={loadScriptFromServer()}>
+          {this.props.componentName}: {this.props.included == "yes" ? "included" : "not included"}
         </BootstrapButton>
     );
   }
