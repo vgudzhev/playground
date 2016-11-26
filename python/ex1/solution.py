@@ -1,4 +1,4 @@
-from itertools import chain
+from collections import defaultdict
 
 
 def rotate_left(image):
@@ -33,3 +33,18 @@ def darken_pixel(coef, pixel):
 
 def darken(image, c):
     return [[darken_pixel(c, pixel) for pixel in row] for row in image]
+
+
+def create_histogram(image):
+    histogram = {
+        'red': defaultdict(int),
+        'green': defaultdict(int),
+        'blue': defaultdict(int),
+    }
+
+    for row in image:
+        for pixel in row:
+            histogram['red'][pixel[0]] += 1
+            histogram['green'][pixel[1]] += 1
+            histogram['blue'][pixel[2]] += 1
+    return histogram
